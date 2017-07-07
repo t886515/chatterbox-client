@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
+    <meta http-equiv="refresh" content="60">
     <link rel="stylesheet" href="styles/styles.css">
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -25,8 +27,21 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
+      
+      <h4>Room:</h4> 
+      <input type="text" id="messageText" value=""> 
+      <button type="button" id="testButton">Click on Me</button>
+            <!-- Your HTML goes here! -->
+      <div class="username"> </div>
     </div>
-    <div id="chats"></div>
+    
+    <div id="roomSelect"> </div> 
+    
+    <div id="chats">
+      
+      <!-- chat messages go here? -->
+      
+    </div>      
+    <script></script>
   </body>
 </html>
