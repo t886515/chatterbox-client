@@ -10,8 +10,8 @@ var app = {
 
 var holderMessage = {
   username: window.currentUser,
-  text: '', 
-  roomname: ''
+  text: 'hello  ', 
+  roomname: ';lkajs;ldkfja;lskdjf'
 };
 
 
@@ -21,13 +21,19 @@ $(document).ready(function() {
   //create while loop or something that loops through the fetched data
   // and sets each message into the div
   
-  $('.userName').on('click', function() {
-    console.log('does this button trigger');
+  $('.user').on('click', 'div', function() {
+    console.log('hello');
     
   });
   
+  //   $('#chats').on('click', '.user', function() {
+  //   console.log('does this button trigger');
+    
+  // });
   
   
+  // app.send(holderMessage);
+  // app.fetch();
   
   
   // $('#testButton').on('click', function() {
@@ -46,7 +52,6 @@ app.init = function() {
 };
 
 app.send = function(message) {
-
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: app.server,
@@ -108,7 +113,8 @@ app.renderMessage = function(userObject) {
   var roomname = userObject.roomname;
   var message = userObject.text;
   //console.log('name ', username, ' message: ', message);
-  $('#chats').append(`<div class= userName><p>${username}</p></div>`);
+  // var $message = $()
+  $('#chats').append(`<div class=user><a href='#' class='x'><p>${username}</p></div>`);
   
   //check roomname. append to appropriate room 
 };
