@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>chatterbox</title>
-    <meta http-equiv="refresh" content="60">
+    
     <link rel="stylesheet" href="styles/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -29,21 +29,24 @@
   </head>
   <body>
     <div id="main">
-
       <h1>chatterbox</h1>
+        <input type="text" id="chatRoomName" value="">
+        <button type="button" id="addRoom">Add Chat Room</button>
         <div class="dropdown">
           <button class="roomDropdown" type="button" data-toggle="dropdown">Room List
           <span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a href="#" class='roomName' id='lobby'>lobby</a></li>
+            
           </ul>
-        </div>
+        </div> <div> hello </div>
       
       <h4>Room:</h4> 
       <input type="text" id="messageText" value=""> 
       <button type="button" id="submitButton">Submit</button>
+      <button type="button" id="refresh">Refresh Chats</button>
+
             <!-- Your HTML goes here! -->
-      <div class="username"> </div>
+      
     </div>
     
     <div id="roomSelect"> </div> 
