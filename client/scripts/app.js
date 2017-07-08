@@ -14,94 +14,117 @@ var holderMessage = {
   roomname: 'lobby'
 };
 
-var friendList = [];
-var uniqueRoomNames = [];
+window.friendList = {};
+window.uniqueRoomNames = [];
 
 //THIS ESSENTIALLY WILL BE IN INIT
-$(document).ready(function() {
-  //create while loop or something that loops through the fetched data
-  // and sets each message into the div
-  app.fetch();
+app.handleUsernameClick = function(username) {
   
-  $('#chats').on('click', '.username', function() {
-    //var addUser = $("this").attr('id');
-    var userIDClicked = this.id;
-    console.log(this.id);
-    friendList.push(userIDClicked);
-    //console.log(friendList);
-    // var $section = $('section');
-    // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
-    // $section.append(img);
-  });
-
-  $('.dropdown-menu').on('click', '.roomName', function() {
-    // console.log(this.id);
-    app.fetch(this.id);
-    holderMessage.roomname = this.id;
-    console.log(holderMessage.roomname);
-    //app.filterMessageByRoom(this.id);
-  });
-  $('.dropdown-menu').on('click', function() {
-    // console.log(this.id);
-    holderMessage.roomname = this.id;
-    //app.filterMessageByRoom(this.id);
-    
-  });
-
-  $('#submitButton').on('click', function() {
-    //console.log($('#messageText').val());
-  
-    holderMessage.text = $('#messageText').val();
-    // console.log(holderMessage.text);
-    // console.log(holderMessage);
-    app.send(holderMessage);
+  if (friendList[username] === undefined || friendList[username] === false) {
+    friendList[username] = true;
+    app.clearMessages();
     app.fetch(holderMessage.roomname);
+  } else {
+    friendList[username] = false;
+    app.clearMessages();
+    app.fetch(holderMessage.roomname);      
+  }
 
-  }); 
+};
 
-  $('#addRoom').on('click', function() {
-    var newRoomName = $('#chatRoomName').val();
-    if (uniqueRoomNames.indexOf(newRoomName) < 0) {
-      uniqueRoomNames.push(value.roomname);
-      app.renderRoom(newRoomName);
-    } else {
-      console.log('error');
-    }
+app.handleSubmit = function(value) {
   
-  });
-  
-  $('#refresh').on('click', function() {
-    console.log(holderMessage.roomname);
-    app.fetch(holderMessage.roomname);
-  });
-  // $(".test a").click(function(){
-  //   //var addUser = $(".username");
-  //   console.log('HI')
-  //   console.log($(this).attr('id'));
-  //   // var $section = $('section');
-  //   // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
-  //   // $section.append(img);
-  // })
-  
-  
-  
-  // $('#testButton').on('click', function() {
-  //   var $node = $('#chats');
-  //   $node.append(`<p> ${window.currentUser} </p>`);
-  //   console.log('i was clicked')
-  // });
-  
-  
-  //a button to add all recent message's chatroom to our chatroom
-  //**things need to be changed outside: need an array to store all the current room list
-  //when button is click:
-  //1) 
-  
-  
-});
+  app.send(holderMessage);
+  app.fetch(holderMessage.roomname);
+};
 
 app.init = function() {
+  
+  $(document).ready(function() {
+    //create while loop or something that loops through the fetched data
+    // and sets each message into the div
+    app.fetch(holderMessage.roomname);
+    $('.currentRoom').text('Room: ' + holderMessage.roomname);
+    
+    $('#chats').on('click', '.username', function() {
+      //var addUser = $("this").attr('id');
+      var userIDClicked = this.id;
+      app.handleUsernameClick(userIDClicked);
+      // console.log(this.id);
 
+      //console.log(friendList);
+      // var $section = $('section');
+      // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
+      // $section.append(img);
+    });
+
+    $('.dropdown-menu').on('click', '.roomName', function() {
+      // console.log(this.id);
+      app.clearMessages();
+      app.fetch(this.id);
+      //app.getAllRoom();
+      holderMessage.roomname = this.id;
+      $('.currentRoom').text('Room: ' + holderMessage.roomname);
+      //app.filterMessageByRoom(this.id);
+    });
+    // $('.dropdown-menu').on('click', function() {
+    //    console.log('tr');
+    //   holderMessage.roomname = this.id;
+    //   //app.filterMessageByRoom(this.id);
+      
+    // })
+    
+    
+    $('#send').submit(function(event) {
+      
+      holderMessage.text = $('#message').val();
+      event.preventDefault();
+      app.handleSubmit($('#message').val());
+      $('#message').val('');
+    });
+
+    $('#addRoom').on('click', function() {
+      var newRoomName = $('#chatRoomName').val();
+      if (uniqueRoomNames.indexOf(newRoomName) < 0) {
+        uniqueRoomNames.push(newRoomName);
+        app.renderRoom(newRoomName);
+        $('#chatRoomName').val('');
+      } else {
+        alert('must add chat room name before proceeding');
+      }
+    
+    });
+    
+    $('#refresh').on('click', function() {
+      console.log(holderMessage.roomname);
+      app.clearMessages();
+      app.fetch(holderMessage.roomname);
+    });
+    // $(".test a").click(function(){
+    //   //var addUser = $(".username");
+    //   console.log('HI')
+    //   console.log($(this).attr('id'));
+    //   // var $section = $('section');
+    //   // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
+    //   // $section.append(img);
+    // })
+    
+    
+    
+    // $('#testButton').on('click', function() {
+    //   var $node = $('#chats');
+    //   $node.append(`<p> ${window.currentUser} </p>`);
+    //   console.log('i was clicked')
+    // });
+    
+    
+    //a button to add all recent message's chatroom to our chatroom
+    //**things need to be changed outside: need an array to store all the current room list
+    //when button is click:
+    //1) 
+    
+    
+  });
   
 };
 
@@ -136,8 +159,6 @@ app.fetch = function(roomname) {
       // forEach the entire result array
         // for each object, send name and message to renderMessage
           // for each room property, send value to renderRoom
-
-      app.clearMessages();
       
       var resultArray = data.results;
       resultArray.forEach((value) => {
@@ -180,12 +201,19 @@ app.renderMessage = function(userObject) {
   $userNameNode.addClass('username');
   $userNameNode.attr('id', username);
   //console.log($userNameNode)
+  if (friendList[username] === undefined || friendList[username] === false) {
+    $userNameNode.css('font-weight', 'bold');
+    $userNameNode.css('color', 'black');
+  } else {
+    $userNameNode.css('font-weight', 'bold');
+    $userNameNode.css('color', 'blue');
+  }
   var $messageNode = $('<p></p>');
   $messageNode.text(message);
   $('#chats').append($userNameNode);
   $('#chats').append($messageNode);
+  //console.log(friendList);
   // $('#chats').append(`<div><a href='#' class='username' id='${username}'>${username}</a> says:</div><p> ${message}</p>`);
-  
 };
 
 // app.filterMessageByRoom = function(userObject, roomname) {
