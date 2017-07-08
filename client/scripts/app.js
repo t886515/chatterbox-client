@@ -10,30 +10,59 @@ var app = {
 
 var holderMessage = {
   username: window.currentUser,
-  text: 'hello  ', 
-  roomname: ';lkajs;ldkfja;lskdjf'
+  text: '', 
+  roomname: '1'
 };
+console.log(holderMessage.roomname);
 
-
+var friendList = [];
 
 //THIS ESSENTIALLY WILL BE IN INIT
 $(document).ready(function() {
   //create while loop or something that loops through the fetched data
   // and sets each message into the div
   
-  $('.user').on('click', 'div', function() {
-    console.log('hello');
+  $('.userName').on('click', function() {
+    console.log('does this button trigger');
     
   });
   
-  //   $('#chats').on('click', '.user', function() {
-  //   console.log('does this button trigger');
-    
-  // });
+  $("#chats").on("click", ".username", function(){
+    //var addUser = $("this").attr('id');
+    var userIDClicked = this.id;
+    //console.log(this.id);
+    friendList.push(userIDClicked);
+    console.log(friendList);
+    // var $section = $('section');
+    // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
+    // $section.append(img);
+  })
+
+  $(".dropdown-menu").on("click", ".roomName", function(){
+    console.log(this.id);
+    app.fetch(this.id)
+    holderMessage.roomname = this.id;
+    //app.filterMessageByRoom(this.id);
+  })
+
+  $("#submitButton").on("click", function(){
+    //console.log($('#messageText').val());
+
+    holderMessage.text = $('#messageText').val();
+    console.log(holderMessage.text);
+    console.log(holderMessage);
+    app.send(holderMessage);
+
+  }) 
+  // $(".test a").click(function(){
+  //   //var addUser = $(".username");
+  //   console.log('HI')
+  //   console.log($(this).attr('id'));
+  //   // var $section = $('section');
+  //   // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
+  //   // $section.append(img);
+  // })
   
-  
-  // app.send(holderMessage);
-  // app.fetch();
   
   
   // $('#testButton').on('click', function() {
@@ -52,6 +81,7 @@ app.init = function() {
 };
 
 app.send = function(message) {
+
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: app.server,
@@ -69,14 +99,13 @@ app.send = function(message) {
 
 };
 
-
-app.fetch = function() {
+app.fetch = function(roomname) {
 
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: app.server,
     type: 'GET',
-    // data:
+    data: {'order': "-createdAt"},
     contentType: 'application/json',
     success: function (data) {
       // forEach the entire result array
@@ -84,8 +113,11 @@ app.fetch = function() {
           // for each room property, send value to renderRoom
       var resultArray = data.results;
       resultArray.forEach((value) => {
-        app.renderMessage(value);
-      });    
+        if (value.roomname === roomname) {
+          app.renderMessage(value);
+        }
+      });
+      app.renderRoom('superLobby');    
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -94,7 +126,7 @@ app.fetch = function() {
   });
 
 };
-console.log(app.fetch());
+
 
 app.clearMessages = function() {
 
@@ -113,14 +145,30 @@ app.renderMessage = function(userObject) {
   var roomname = userObject.roomname;
   var message = userObject.text;
   //console.log('name ', username, ' message: ', message);
-  // var $message = $()
-  $('#chats').append(`<div class=user><a href='#' class='x'><p>${username}</p></div>`);
+  // var $div = $('#chats');
+  // var $divBody = $('<div class=user></div>')
+  // $divBody.html('<div id = ' + username + '><h3 id = allNames> ' + username + '</h3> <p id = allMessages>' + message + '</p></div>');
+  // $divBody.appendTo($div);
+
+  $('#chats').append(`<div><a href='#' class='username' id='${username}'>${username}</a> says:</div><p> ${message}</p>`);
   
   //check roomname. append to appropriate room 
 };
 
+app.filterMessageByRoom = function(userObject, roomname) {
+if (userObject.roomname === roomname) {
+  var username = userObject.username;
+  var message = userObject.text;
+  $('#chats').append(`<div><a href='#' class='username' id='${username}'>${username}</a> says:</div><p> ${message}</p>`);
+}
+}
+
+
+
 app.renderRoom = function(roomName) {
-  $('#roomSelect').append(`<div class=${roomName}>` + roomName + '</div>');
+  $('.dropdown-menu').append(`<li><a href="#" class='roomName' id='${roomName}'>${roomName}</a></li>`)
+ 
+  //$('#roomSelect').append(`<div class=${roomName}>` + roomName + '</div>');
   
 };
 
