@@ -34,9 +34,9 @@
         <input type="text" id="chatRoomName" value="">
         <button type="button" id="addRoom">Add Chat Room</button>
         <div class="dropdown">
-          <button class="roomDropdown" type="button" data-toggle="dropdown">Room List
+          <button class="roomDropdown" type="button" data-toggle="dropdown">Room List:
           <span class="caret"></span></button>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" id='roomSelect'>
             
           </ul>
         </div>
@@ -49,16 +49,12 @@
         <input type="text" name="message" id="message"/>
         <input type="submit" name="submit" class="submit"/>
       </form>
-    </div>
-    
-    <div id="roomSelect"> </div> 
-    
-    
+    </div>    
     
     <div id="chats">
       <!-- chat messages go here? -->
       
     </div>      
-    <script> app.init() </script>
+    <script> app.init();</script>
   </body>
 </html>

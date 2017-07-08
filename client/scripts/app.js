@@ -17,69 +17,30 @@ var holderMessage = {
 window.friendList = {};
 window.uniqueRoomNames = [];
 
-//THIS ESSENTIALLY WILL BE IN INIT
-app.handleUsernameClick = function(username) {
-  
-  if (friendList[username] === undefined || friendList[username] === false) {
-    friendList[username] = true;
-    app.clearMessages();
-    app.fetch(holderMessage.roomname);
-  } else {
-    friendList[username] = false;
-    app.clearMessages();
-    app.fetch(holderMessage.roomname);      
-  }
-
-};
-
-app.handleSubmit = function(value) {
-  
-  app.send(holderMessage);
-  app.fetch(holderMessage.roomname);
-};
-
 app.init = function() {
   
   $(document).ready(function() {
-    //create while loop or something that loops through the fetched data
-    // and sets each message into the div
+
     app.fetch(holderMessage.roomname);
     $('.currentRoom').text('Room: ' + holderMessage.roomname);
     
     $('#chats').on('click', '.username', function() {
-      //var addUser = $("this").attr('id');
       var userIDClicked = this.id;
       app.handleUsernameClick(userIDClicked);
-      // console.log(this.id);
 
-      //console.log(friendList);
-      // var $section = $('section');
-      // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
-      // $section.append(img);
     });
 
     $('.dropdown-menu').on('click', '.roomName', function() {
-      // console.log(this.id);
       app.clearMessages();
       app.fetch(this.id);
-      //app.getAllRoom();
       holderMessage.roomname = this.id;
       $('.currentRoom').text('Room: ' + holderMessage.roomname);
-      //app.filterMessageByRoom(this.id);
     });
-    // $('.dropdown-menu').on('click', function() {
-    //    console.log('tr');
-    //   holderMessage.roomname = this.id;
-    //   //app.filterMessageByRoom(this.id);
-      
-    // })
-    
     
     $('#send').submit(function(event) {
-      
       holderMessage.text = $('#message').val();
       event.preventDefault();
-      app.handleSubmit($('#message').val());
+      app.handleSubmit();
       $('#message').val('');
     });
 
@@ -100,32 +61,31 @@ app.init = function() {
       app.clearMessages();
       app.fetch(holderMessage.roomname);
     });
-    // $(".test a").click(function(){
-    //   //var addUser = $(".username");
-    //   console.log('HI')
-    //   console.log($(this).attr('id'));
-    //   // var $section = $('section');
-    //   // img = `<article class='afterClick'><p class='clickable'>Wanna play <a href="ext1.html">Rock-Paper-Scissors?</a></p><img src="stylesheet/teddy2.png" alt="bear" id="secondbear"</article>>`
-    //   // $section.append(img);
-    // })
-    
-    
-    
-    // $('#testButton').on('click', function() {
-    //   var $node = $('#chats');
-    //   $node.append(`<p> ${window.currentUser} </p>`);
-    //   console.log('i was clicked')
-    // });
-    
-    
-    //a button to add all recent message's chatroom to our chatroom
-    //**things need to be changed outside: need an array to store all the current room list
-    //when button is click:
-    //1) 
-    
     
   });
   
+};
+
+app.handleUsernameClick = function(username) {
+  
+  if (friendList[username] === undefined || friendList[username] === false) {
+    friendList[username] = true;
+    app.clearMessages();
+    app.fetch(holderMessage.roomname);
+  } else {
+    friendList[username] = false;
+    app.clearMessages();
+    app.fetch(holderMessage.roomname);      
+  }
+
+};
+
+
+
+app.handleSubmit = function() {
+  app.clearMessages();
+  app.send(holderMessage);
+  app.fetch(holderMessage.roomname);
 };
 
 app.send = function(message) {
@@ -156,9 +116,6 @@ app.fetch = function(roomname) {
     data: {'order': '-createdAt'},
     contentType: 'application/json',
     success: function (data) {
-      // forEach the entire result array
-        // for each object, send name and message to renderMessage
-          // for each room property, send value to renderRoom
       
       var resultArray = data.results;
       resultArray.forEach((value) => {
@@ -212,52 +169,10 @@ app.renderMessage = function(userObject) {
   $messageNode.text(message);
   $('#chats').append($userNameNode);
   $('#chats').append($messageNode);
-  //console.log(friendList);
-  // $('#chats').append(`<div><a href='#' class='username' id='${username}'>${username}</a> says:</div><p> ${message}</p>`);
 };
-
-// app.filterMessageByRoom = function(userObject, roomname) {
-//   if (userObject.roomname === roomname) {
-//     var username = userObject.usernme;
-//     var message = userObject.text;
-//     $('#chats').append(`<div><a href='#' class='username' id='${username}'>${username}</a> says:</div><p> ${message}</p>`);
-//   } 
-// };
-
-
 
 app.renderRoom = function(roomName) {
-  $('.dropdown-menu').append(`<li><a href="#" class='roomName' id='${roomName}'>${roomName}</a></li>`);
- 
-  //$('#roomSelect').append(`<div class=${roomName}>` + roomName + '</div>');
   
+  $('#roomSelect').append(`<li><a href="#" class='roomName' id='${roomName}'>${roomName}</a></li>`);
 };
 
-
-
-
-
-
-
-// var message = {
-//   username: 'shawndrost',
-//   text: 'trololo',
-//   roomname: '4chan'
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var loggedInAs = 'Eric';
