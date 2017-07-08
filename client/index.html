@@ -28,10 +28,11 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
+   <div id="friends">hello<div>I'm more text</div></div>
     <div id="main">
       <h1>chatterbox</h1>
       
-        <input type="text" id="chatRoomName" value="">
+        <input type="text" id="chatRoomName" value="" placeholder="room name">
         <button type="button" id="addRoom">Add Chat Room</button>
         <div class="dropdown">
           <button class="roomDropdown" type="button" data-toggle="dropdown">Room List:
@@ -42,13 +43,13 @@
         </div>
       
       
-      <button type="button" id="refresh">Refresh Chats</button>
       <h4 class = 'currentRoom'></h4> 
           
       <form action="#" id="send" method="post">
-        <input type="text" name="message" id="message"/>
+        <input type="text" name="message" id="message" placeholder="what's on your mind?"/>
         <input type="submit" name="submit" class="submit"/>
       </form>
+      <button type="button" id="refresh">Refresh Chats</button>
     </div>    
     
     <div id="chats">

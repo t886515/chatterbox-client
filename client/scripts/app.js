@@ -27,7 +27,6 @@ app.init = function() {
     $('#chats').on('click', '.username', function() {
       var userIDClicked = this.id;
       app.handleUsernameClick(userIDClicked);
-
     });
 
     $('.dropdown-menu').on('click', '.roomName', function() {
@@ -97,7 +96,7 @@ app.send = function(message) {
     data: JSON.stringify(message),
     contentType: 'application/json',
     success: function (data) {
-      console.log(data);
+      
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -107,8 +106,9 @@ app.send = function(message) {
 
 };
 
-app.fetch = function(roomname) {
 
+app.fetch = function(roomname) { 
+     
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
     url: app.server,
@@ -116,10 +116,14 @@ app.fetch = function(roomname) {
     data: {'order': '-createdAt'},
     contentType: 'application/json',
     success: function (data) {
-      
+  
       var resultArray = data.results;
       resultArray.forEach((value) => {
         app.getAllChatRooms(value);
+        
+        if (value.text.includes('@' + holderMessage.username)) {
+          alert('youve been mentioned by ' + value.username + ' in room: ' + value.roomname);
+        }
         if (value.roomname === roomname) {
           app.renderMessage(value);
         }
@@ -131,17 +135,24 @@ app.fetch = function(roomname) {
       console.error('chatterbox: Failed to send message', data);
     }
   });
-
+  app.displayFriends();
 };
 
 app.getAllChatRooms = function(value) {
-  
+
   if (uniqueRoomNames.indexOf(value.roomname) < 0) {
     uniqueRoomNames.push(value.roomname);
     app.renderRoom(value.roomname);
   }
+
 };
 
+app.displayFriends = function() {
+  $('#friends').html('');
+  for (var key in friendList) {
+    $('#friends').append($('<div>' + key + '</div>'));
+  }
+};
 
 app.clearMessages = function() {
 
@@ -164,15 +175,17 @@ app.renderMessage = function(userObject) {
   } else {
     $userNameNode.css('font-weight', 'bold');
     $userNameNode.css('color', 'blue');
+  
   }
   var $messageNode = $('<p></p>');
   $messageNode.text(message);
+  
   $('#chats').append($userNameNode);
   $('#chats').append($messageNode);
 };
 
 app.renderRoom = function(roomName) {
-  
+  // sanitize roomName
   $('#roomSelect').append(`<li><a href="#" class='roomName' id='${roomName}'>${roomName}</a></li>`);
 };
 
