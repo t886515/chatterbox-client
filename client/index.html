@@ -5,6 +5,9 @@
     <title>chatterbox</title>
     <meta http-equiv="refresh" content="60">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -26,7 +29,15 @@
   </head>
   <body>
     <div id="main">
+
       <h1>chatterbox</h1>
+        <div class="dropdown">
+          <button class="roomDropdown" type="button" data-toggle="dropdown">Dropdown Example
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">HTML</a></li>
+          </ul>
+        </div>
       
       <h4>Room:</h4> 
       <input type="text" id="messageText" value=""> 
@@ -37,8 +48,10 @@
     
     <div id="roomSelect"> </div> 
     
+    
+    
     <div id="chats">
-      
+      <p> some text here l;kjasdlk;fjas </p>
       <!-- chat messages go here? -->
       
     </div>      

@@ -4,6 +4,8 @@ window.currentUser = window.location.search.slice(10).split('%20').join(' ');
 
 var app = {
   
+  server: 'http://parse.atx.hackreactor.com/chatterbox/classes/messages',
+  
 };
 
 var holderMessage = {
@@ -12,17 +14,21 @@ var holderMessage = {
   roomname: ''
 };
 
-console.log(document.getElementById('messageText'));
 
+
+//THIS ESSENTIALLY WILL BE IN INIT
 $(document).ready(function() {
   //create while loop or something that loops through the fetched data
   // and sets each message into the div
   
-  $('#testButton').on('click', function() {
-    var x = document.getElementById('messageText').value;
-    holderMessage.text = x;
-    console.log(holderMessage.text);
+  $('.userName').on('click', function() {
+    console.log('does this button trigger');
+    
   });
+  
+  
+  
+  
   
   // $('#testButton').on('click', function() {
   //   var $node = $('#chats');
@@ -43,7 +49,7 @@ app.send = function(message) {
 
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
-    url: 'http://parse.atx.hackreactor.com/chatterbox/classes/messages',
+    url: app.server,
     type: 'POST',
     data: JSON.stringify(message),
     contentType: 'application/json',
@@ -58,16 +64,23 @@ app.send = function(message) {
 
 };
 
+
 app.fetch = function() {
 
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
-    url: undefined,
+    url: app.server,
     type: 'GET',
-    data: JSON.stringify(message),
+    // data:
     contentType: 'application/json',
     success: function (data) {
-      console.log('chatterbox: Message sent');
+      // forEach the entire result array
+        // for each object, send name and message to renderMessage
+          // for each room property, send value to renderRoom
+      var resultArray = data.results;
+      resultArray.forEach((value) => {
+        app.renderMessage(value);
+      });    
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -76,18 +89,33 @@ app.fetch = function() {
   });
 
 };
+console.log(app.fetch());
 
 app.clearMessages = function() {
-  
+
   $('#chats').html('');
 };
 
-app.renderMessage = function(message) {
-  $('#chats').append(`<p>${message}</p>`);
+app.renderMessage = function(userObject) {
+  //for each? the data 
+  // grab each object and it's properties
+    // append those property values to the webpage
+    
+  // loop through like twittler, all of the messages for a specific room,
+    // creating it's div at each iteration, just like twittler.
+    
+  var username = userObject.username;
+  var roomname = userObject.roomname;
+  var message = userObject.text;
+  //console.log('name ', username, ' message: ', message);
+  $('#chats').append(`<div class= userName><p>${username}</p></div>`);
+  
+  //check roomname. append to appropriate room 
 };
 
 app.renderRoom = function(roomName) {
-  $('#roomSelect').append('<blink>' + roomName + '</blink>');
+  $('#roomSelect').append(`<div class=${roomName}>` + roomName + '</div>');
+  
 };
 
 
